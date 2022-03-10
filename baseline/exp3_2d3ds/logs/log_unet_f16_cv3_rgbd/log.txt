@@ -1,0 +1,10 @@
+Namespace(batch_size=16, test_batch_size=16, epochs=200, lr=0.001, no_cuda=False, seed=1, mesh_folder='../../mesh_files', data_folder='data', log_interval=10, log_dir='logs/log_unet_f16_cv3_rgbd', decay=True, optim='adam', resume=None, fold=3, blackout_id='', in_ch='rgbd', train_stats_freq=5, model='UNet', pretrained=False, feat=16)
+1944431 paramerters in total
+Namespace(batch_size=16, test_batch_size=16, epochs=200, lr=0.001, no_cuda=False, seed=1, mesh_folder='../../mesh_files', data_folder='data', log_interval=10, log_dir='logs/log_unet_f16_cv3_rgbd', decay=True, optim='adam', resume=None, fold=3, blackout_id='', in_ch='rgbd', train_stats_freq=5, model='UNet', pretrained=False, feat=16)
+1944431 paramerters in total
+Namespace(batch_size=16, test_batch_size=16, epochs=200, lr=0.001, no_cuda=False, seed=1, mesh_folder='../../mesh_files', data_folder='data', log_interval=10, log_dir='logs/log_unet_f16_cv3_rgbd', decay=True, optim='adam', resume=None, fold=3, blackout_id='', in_ch='rgbd', train_stats_freq=5, model='UNet', pretrained=False, feat=16)
+1944431 paramerters in total
+Namespace(batch_size=16, test_batch_size=16, epochs=200, lr=0.001, no_cuda=False, seed=1, mesh_folder='../../mesh_files', data_folder='data', log_interval=10, log_dir='logs/log_unet_f16_cv3_rgbd', decay=True, optim='adam', resume=None, fold=3, blackout_id='', in_ch='rgbd', train_stats_freq=5, model='UNet', pretrained=False, feat=16)
+1944431 paramerters in total
+Train Epoch: 1 [0/930 (0%)] Loss: 3.000669
+Train Epoch: 1 [160/930 (17%)] Loss: 2.604410
