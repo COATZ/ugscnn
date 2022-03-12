@@ -24,7 +24,7 @@ mkdir -p logs
 
 #source activate
 
-python train.py \
+python3 train.py \
 --batch-size 16 \
 --test-batch-size 16 \
 --epochs 200 \

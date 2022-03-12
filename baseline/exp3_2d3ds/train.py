@@ -254,7 +254,9 @@ def main():
         scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=20, gamma=0.9)
 
     checkpoint_path = os.path.join(args.log_dir, 'checkpoint_latest.pth.tar')
-
+    #print(model)
+    #import sys
+    #sys.exit()
     # training loop
     for epoch in range(start_ep + 1, args.epochs + 1):
         if args.decay:
