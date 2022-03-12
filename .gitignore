@@ -26,6 +26,7 @@ wheels/
 MANIFEST
 UGSCNN/
 baseline/exp3_2d3ds/data/
+baseline/exp3_2d3ds/logs/
 
 
 # PyInstaller
