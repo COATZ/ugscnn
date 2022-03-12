@@ -62,9 +62,19 @@ class SemSegLoader(Dataset):
 
     def __getitem__(self, idx):
         # load files
+        #print(self.rgb_list[idx])
         rgb = iio.imread(self.rgb_list[idx], mode='RGB')/255.
+        #print(rgb.shape)
+        #rgbs = rgb.shape
+        #w2 = int(rgbs[1]/2)
+        #h2 = int(rgbs[0]/2)        
+        #print(rgb[h2-2:h2+2,w2-2:w2+2,:])
         d = np.expand_dims(np.clip(iio.imread(self.d_list[idx])/1000, 0, 5), -1)
+        #print(d)
         out_semantic = iio.imread(self.labels_list[idx])
+        #print(out_semantic)
+        #import sys
+        #sys.exit()
         out_feature_instance_id = out_semantic[..., 1].astype('uint32') * 256 + out_semantic[...,2].astype('uint32')
         out_feature_semantic_id = self.labelmap[out_feature_instance_id]
 

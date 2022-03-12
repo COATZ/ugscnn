@@ -18,9 +18,22 @@ from torch.utils.data import Dataset, DataLoader
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+from tabulate import tabulate
 
 classes = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+class_names = ["unknown", "beam", "board", "bookcase", "ceiling", "chair", "clutter", "column", 
+               "door", "floor", "sofa", "table", "wall", "window", "invalid"]
 drop = [0, 14]
+keep = np.setdiff1d(classes, drop)
+label_ratio = [0.04233976974675504, 0.014504436907968913, 0.017173225930738712, 
+               0.048004778186652164, 0.17384037404789865, 0.028626771620973622, 
+               0.087541966989014, 0.019508096683310605, 0.08321331842901526, 
+               0.17002664771895903, 0.002515611224467519, 0.020731298851232174, 
+               0.2625963729249342, 0.016994731594287146, 0.012382599143792165]
+# label_weight = 1/np.array(label_ratio)/np.sum((1/np.array(label_ratio))[keep])
+label_weight = 1 / np.log(1.02 + np.array(label_ratio))
+label_weight[drop] = 0
+label_weight = label_weight.astype(np.float32)
 
 def plot_confusion_matrix(cm, classes,
                           normalize=False,
@@ -64,13 +77,27 @@ def iou_score(pred_cls, true_cls, nclass=15, drop=drop):
     """
     intersect_ = []
     union_ = []
+    #pred_cls = float(pred_cls)
+    #true_cls = float(true_cls)
     for i in range(nclass):
         if i not in drop:
-            intersect = ((pred_cls == i) + (true_cls == i)).eq(2).sum().item()
-            union = ((pred_cls == i) + (true_cls == i)).ge(1).sum().item()
+            #print((1*(pred_cls == i) + 1*(true_cls == i)).eq(2).sum().item())
+            intersect = (1*(pred_cls == i) + 1*(true_cls == i)).eq(2).sum().item()
+            union = (1*(pred_cls == i) + 1*(true_cls == i)).ge(1).sum().item()
             intersect_.append(intersect)
             union_.append(union)
     return np.array(intersect_), np.array(union_)
+
+def accuracy(pred_cls, true_cls, nclass=15, drop=drop):
+    positive = torch.histc(true_cls.cpu().float(), bins=nclass, min=0, max=nclass, out=None)
+    per_cls_counts = []
+    tpos = []
+    for i in range(nclass):
+        if i not in drop:
+            true_positive = (1*(pred_cls == i) + 1*(true_cls == i)).eq(2).sum().item()
+            tpos.append(true_positive)
+            per_cls_counts.append(positive[i])
+    return np.array(tpos), np.array(per_cls_counts)
 
 def test(args, model, test_loader, epoch, device):
     w = torch.tensor(label_weight).to(device)
@@ -201,12 +228,12 @@ def main():
     testset = SemSegLoader(args.data_folder, "test", fold=args.fold, in_ch=len(args.in_ch))
     test_loader = DataLoader(testset, batch_size=args.test_batch_size, shuffle=False, drop_last=False)
 
-    if args.export_file:
+    if args.export_file and False:
         export(args, model, test_loader)
         with open(args.model+"_v1_files.txt", "w") as f:
             f.writelines([l+"\n" for l in testset.rgb_list])
-    else:
-        test(args, model, test_loader, epoch, device)
+    epoch = 0
+    test(args, model, test_loader, epoch, device)
         
 if __name__ == "__main__":
     main()

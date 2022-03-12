@@ -54,8 +54,8 @@ def iou_score(pred_cls, true_cls, nclass=15, drop=drop):
     union_ = []
     for i in range(nclass):
         if i not in drop:
-            intersect = ((pred_cls == i) + (true_cls == i)).eq(2).sum().item()
-            union = ((pred_cls == i) + (true_cls == i)).ge(1).sum().item()
+            intersect = (1+(pred_cls == i) + 1+(true_cls == i)).eq(2).sum().item()
+            union = (1+(pred_cls == i) + 1+(true_cls == i)).ge(1).sum().item()
             intersect_.append(intersect)
             union_.append(union)
     return np.array(intersect_), np.array(union_)
@@ -66,7 +66,7 @@ def accuracy(pred_cls, true_cls, nclass=15, drop=drop):
     tpos = []
     for i in range(nclass):
         if i not in drop:
-            true_positive = ((pred_cls == i) + (true_cls == i)).eq(2).sum().item()
+            true_positive = (1+(pred_cls == i) + 1+(true_cls == i)).eq(2).sum().item()
             tpos.append(true_positive)
             per_cls_counts.append(positive[i])
     return np.array(tpos), np.array(per_cls_counts)
@@ -171,7 +171,6 @@ def main():
     parser.add_argument('--model', type=str, choices=["ResNetDUCHDC", "FCN8s", "UNet"], required=True, help="model of choice")
     parser.add_argument('--pretrained', action='store_true', help="whether to use pretrained model for ResNetDUCHDC and FCN8s")
     parser.add_argument('--feat', type=int, help="number of feature layers")
-
 
     args = parser.parse_args()
     use_cuda = not args.no_cuda and torch.cuda.is_available()
