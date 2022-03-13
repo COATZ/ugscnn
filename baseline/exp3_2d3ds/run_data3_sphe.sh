@@ -1,6 +1,6 @@
 #!/bin/bash
 MESHFILES=../../mesh_files
-DATADIR=data2
+DATADIR=data3_sphe
 
 if [ ! -d $MESHFILES ]; then
     echo "[!] Mesh files do not exist..."
@@ -28,9 +28,9 @@ python3 train.py \
 --batch-size 16 \
 --test-batch-size 16 \
 --epochs 200 \
---data_folder data2 \
+--data_folder data3_sphe \
 --fold 3 \
---log_dir logs/log_unet_f16_cv3_rgbd_data2 \
+--log_dir logs/log_unet_f16_cv3_rgbd_data3_sphe \
 --decay \
 --train_stats_freq 5 \
 --model UNet \
