@@ -8,7 +8,7 @@ import os
 import shutil
 
 from loader import SemSegLoader
-from models import ResNetDUCHDC, FCN8s, UNet
+from models import ResNetDUCHDC, FCN8s, UNet, UNet_sphe
 
 import torch
 import torch.nn.functional as F
@@ -183,7 +183,7 @@ def main():
     parser.add_argument('--export_file', type=str, default='samples.npz', help='file name for exporting samples')
     parser.add_argument('--in_ch', type=str, default="rgbd", choices=["rgb", "rgbd"], help="input channels")
     parser.add_argument('--fold', type=int, choices=[1, 2, 3], default=1, help="choice among 3 fold for cross-validation")
-    parser.add_argument('--model', type=str, choices=["ResNetDUCHDC", "FCN8s", "UNet"], required=True, help="model of choice")
+    parser.add_argument('--model', type=str, choices=["ResNetDUCHDC", "FCN8s", "UNet", "UNet_sphe"], required=True, help="model of choice")
 
 
     args = parser.parse_args()
@@ -198,6 +198,8 @@ def main():
         model = FCN8s(len(classes), pretrained=False, feat=args.feat, in_ch=len(args.in_ch))
     elif args.model == "UNet":
         model = UNet(len(classes), len(args.in_ch), feat=args.feat)
+    elif args.model == "UNet_sphe":
+        model = UNet_sphe(len(classes), len(args.in_ch), feat=args.feat)
     model = nn.DataParallel(model)
     model.to(device)
 
@@ -227,6 +229,7 @@ def main():
           .format(args.ckpt, resume_dict['epoch'], best_miou))
     testset = SemSegLoader(args.data_folder, "test", fold=args.fold, in_ch=len(args.in_ch))
     test_loader = DataLoader(testset, batch_size=args.test_batch_size, shuffle=False, drop_last=False)
+    print(model)
 
     if args.export_file and False:
         export(args, model, test_loader)

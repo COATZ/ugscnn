@@ -1,14 +1,13 @@
 #!/bin/bash
 MESHFILES=../../mesh_files
-DATADIR=data2
-
+DATADIR=data2_sphe
 
 python3 test.py \
 --test-batch-size 16 \
---data_folder data2 \
+--data_folder data2_sphe \
 --fold 3 \
 --ckpt logs/log_unet_f16_cv3_rgbd_data2/checkpoint_latest.pth.tar_UNet_200.pth.tar \
---model UNet \
+--model UNet_sphe \
 --in_ch rgbd \
 --feat 16
 
