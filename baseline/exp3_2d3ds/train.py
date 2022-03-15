@@ -5,7 +5,7 @@ import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
 import torch
-from models import ResNetDUCHDC, ResNetDUCHDC_sphe, FCN8s, UNet, UNet_sphe
+from models import ResNetDUCHDC, FCN8s, FCN8s_sphe, UNet, UNet_sphe
 from loader import SemSegLoader
 from tabulate import tabulate
 from collections import OrderedDict
@@ -175,7 +175,7 @@ def main():
     parser.add_argument('--in_ch', type=str, default="rgbd", choices=["rgb", "rgbd"], help="input channels")
     parser.add_argument('--train_stats_freq', default=5, type=int,
                         help="frequency for printing training set stats. 0 for never.")
-    parser.add_argument('--model', type=str, choices=["ResNetDUCHDC", "ResNetDUCHDC_sphe", "FCN8s", "UNet", "UNet_sphe"], required=True, help="model of choice")
+    parser.add_argument('--model', type=str, choices=["ResNetDUCHDC", "FCN8s", "FCN8s_sphe", "UNet", "UNet_sphe"], required=True, help="model of choice")
     parser.add_argument('--pretrained', action='store_true', help="whether to use pretrained model for ResNetDUCHDC and FCN8s")
     parser.add_argument('--feat', type=int, help="number of feature layers")
 
@@ -214,6 +214,8 @@ def main():
         model = ResNetDUCHDC(len(classes), pretrained=args.pretrained, in_ch=len(args.in_ch))
     elif args.model == "FCN8s":
         model = FCN8s(len(classes), pretrained=args.pretrained,  feat=args.feat, in_ch=len(args.in_ch))
+    elif args.model == "FCN8s_sphe":
+        model = FCN8s_sphe(len(classes), pretrained=args.pretrained,  feat=args.feat, in_ch=len(args.in_ch))
     elif args.model == "UNet":
         model = UNet(len(classes), len(args.in_ch), feat=args.feat)
     elif args.model == "UNet_sphe":
@@ -262,7 +264,7 @@ def main():
         scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=20, gamma=0.9)
 
     checkpoint_path = os.path.join(args.log_dir, 'checkpoint_latest.pth.tar')
-    # print(model)
+    print(model)
     # import sys
     # sys.exit()
     # training loop
